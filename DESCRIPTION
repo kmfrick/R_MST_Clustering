@@ -1,0 +1,12 @@
+Package: mstclustering
+Title: MST Clustering
+Version: 1.0.0.0
+Authors@R: 
+    person("Kevin Michael", "Frick", , "kmfrick98@gmail.com", role = c("aut", "cre"))
+Description: Implements a minimum-spanning-tree-based heuristic for k-means clustering using a union-find disjoint set and Kruskal's algorithm.
+License: `use_agpl_license(version = 3, include_future = TRUE)`
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Depends: R (>= 4.1.0)
+Imports: methods, reshape2
