@@ -8,50 +8,41 @@
 #' @export
 gen.edge.list <- function(mat) {
   mat <- as.matrix(mat)
-  edge.list <- melt(mat)
+  edge.list <- reshape2::melt(mat)
   colnames(edge.list) <- c('from', 'to', 'dist')
   edge.list <- edge.list[edge.list$from != edge.list$to,]
   edge.list
 }
 
-#' UFDS
-#' @param p parent of an item, initially the item itself
-#' @param rank upper bound to tree depth excluding root (initially 0)
-#' @export
-setRefClass("ufds",
-            fields=list(
-              rank="vector",
-              p="vector"
-            )
-)
 
 #' Initialize UFDS
 #' @param m Number of elements.
-#' @return An instance of the class ufds containing m disjoint sets.
-#' @import methods
+#' @return A data table containing a 'rank' column and a 'parent' column.
+#' @import data.table
 #' @export
 reset.ufds <- function(m) {
-  ufds <- new("ufds", rank=rep(0,m), p=as.numeric(1:m))
+  ufds <- data.table(rank=rep(0,m), p=as.integer(1:m))
   ufds
 }
 
 #' Find the set an elements belongs to.
 #' @param i The element to check.
-#' @param ufds An instance of the class ufds.
+#' @param ufds A data.table representing a UFDS.
 #' @export
 find.set <- function (i, ufds) {
   if (ufds$p[i] == i) {
     return(i)
   } else {
     # Optimization: path compression
-    return(ufds$p[i] <- find.set(ufds$p[i], ufds))
+    set(ufds, i, "p", find.set(ufds$p[i], ufds))
+    return(ufds$p[i])
   }
 }
 
 #' Check if two elements are in the same set
 #' @param i The first element in the tuple.
 #' @param j The second element in the tuple.
-#' @param ufds An instance of the class ufds.
+#' @param ufds A data.table representing a UFDS.
 #' @return TRUE if the elements are in the same set, FALSE otherwise.
 #' @export
 is.same.set <- function(i, j, ufds) {
@@ -64,7 +55,7 @@ is.same.set <- function(i, j, ufds) {
 #' Join the sets the two elements passed as arguments belong to.
 #' @param i The first element in the tuple.
 #' @param j The second element in the tuple.
-#' @param ufds An instance of the class ufds.
+#' @param ufds A data.table representing a UFDS.
 #' @export
 union.set <- function(i, j, ufds) {
   if (!is.same.set(i, j, ufds)) {
@@ -72,12 +63,12 @@ union.set <- function(i, j, ufds) {
     set.j <- find.set(j, ufds)
     # Optimization: use rank to keep the tree short
     if (ufds$rank[set.i] > ufds$rank[set.j]) {
-      ufds$p[set.i] <- set.j
+      set(ufds, set.i, "p", set.j)
     } else {
-      ufds$p[set.j] <- set.i
+      set(ufds, set.j, "p", set.i)
     }
     if (ufds$rank[set.i] == ufds$rank[set.j]) {
-      ufds$rank[set.j] <- ufds$rank[set.j] + 1
+      set(ufds, set.j, "rank", ufds$rank[set.j] + 1)
     }
   }
 }
@@ -143,16 +134,15 @@ setRefClass("ClusterList",
 #' @param m Number of nodes.
 #' @param k The number of clusters.
 #' @return A vector whose k-th element is the cluster the k-th point belongs to.
-#' @import methods
 #' @export
 mst.cluster <- function(child.list.mst, m, k) {
-  cluster.list.top <- new("ClusterList", visited=rep(FALSE, m), clust.mst=rep(0, m))
+  cluster.list.top <- data.table(visited=rep(FALSE, m), clust.mst=rep(0, m))
   dfs <- function(u, clust, cluster.list=cluster.list.top) {
     if (cluster.list$visited[u]) {
       return()
     } else {
-      cluster.list$visited[u] <- TRUE
-      cluster.list$clust.mst[u] <- clust
+      set(cluster.list, u, "visited", TRUE)
+      set(cluster.list, u, "clust.mst", clust)
       for (v in child.list.mst[[u]]) {
         dfs(v, clust)
       }
