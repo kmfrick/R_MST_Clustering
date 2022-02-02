@@ -10,7 +10,7 @@ reset.ufds(m)
 \item{m}{Number of elements.}
 }
 \value{
-An instance of the class ufds containing m disjoint sets.
+A data table containing a 'rank' column and a 'parent' column.
 }
 \description{
 Initialize UFDS

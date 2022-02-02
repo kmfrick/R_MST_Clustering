@@ -9,7 +9,7 @@ find.set(i, ufds)
 \arguments{
 \item{i}{The element to check.}
 
-\item{ufds}{An instance of the class ufds.}
+\item{ufds}{A data.table representing a UFDS.}
 }
 \description{
 Find the set an elements belongs to.

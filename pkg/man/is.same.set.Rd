@@ -11,7 +11,7 @@ is.same.set(i, j, ufds)
 
 \item{j}{The second element in the tuple.}
 
-\item{ufds}{An instance of the class ufds.}
+\item{ufds}{A data.table representing a UFDS.}
 }
 \value{
 TRUE if the elements are in the same set, FALSE otherwise.

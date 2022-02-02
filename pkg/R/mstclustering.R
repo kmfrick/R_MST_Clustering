@@ -91,7 +91,7 @@ kruskal <- function(edge.list, m) {
       mst.edge.list <- rbind(mst.edge.list, u)
     }
   }
-  cat("MST cost = ", mst.cost)
+  cat("MST cost = ", mst.cost, "\n")
   mst.edge.list
 }
 
@@ -113,14 +113,6 @@ gen.child.list.mst <- function(clust.edge.list, m) {
   child.list.mst
 }
 
-#' Connected components DFS
-#' @export
-setRefClass("ClusterList",
-            fields=list(
-              visited="vector",
-              clust.mst="vector"
-            )
-)
 
 #' Run clustering using MST.
 #' Before calling this function, remove some edges from the MST, for example the  k-1 heaviest.
