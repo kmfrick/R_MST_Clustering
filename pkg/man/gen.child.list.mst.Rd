@@ -2,7 +2,7 @@
 % Please edit documentation in R/mstclustering.R
 \name{gen.child.list.mst}
 \alias{gen.child.list.mst}
-\title{Generate an adjacency list}
+\title{gen.child.list.mst}
 \usage{
 gen.child.list.mst(clust.edge.list, m)
 }

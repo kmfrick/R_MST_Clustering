@@ -2,7 +2,7 @@
 % Please edit documentation in R/mstclustering.R
 \name{is.same.set}
 \alias{is.same.set}
-\title{Check if two elements are in the same set}
+\title{is.same.set}
 \usage{
 is.same.set(i, j, ufds)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/mstclustering.R
 \name{union.set}
 \alias{union.set}
-\title{Join the sets the two elements passed as arguments belong to.}
+\title{union.set}
 \usage{
 union.set(i, j, ufds)
 }
@@ -12,6 +12,9 @@ union.set(i, j, ufds)
 \item{j}{The second element in the tuple.}
 
 \item{ufds}{A data.table representing a UFDS.}
+}
+\value{
+No return value, called for side effects on rank and p.
 }
 \description{
 Join the sets the two elements passed as arguments belong to.

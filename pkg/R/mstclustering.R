@@ -1,10 +1,11 @@
-#' Generate edge list from a distance matrix
+#' @title gen.edge.list
+#' @description Generate edge list from a distance matrix
 #' Duplicates are not deleted, because they will not be counted
 #' by Kruskal's algorithm
 #' If a check is O(1), this only adds an O(E) overhead, which is negligible
 #' @param mat The distance matrix.
 #' @return A data frame with three columns: 'from', 'to', 'dist'.
-#' @import reshape2
+#' @importFrom reshape2 melt
 #' @export
 gen.edge.list <- function(mat) {
   mat <- as.matrix(mat)
@@ -15,19 +16,23 @@ gen.edge.list <- function(mat) {
 }
 
 
-#' Initialize UFDS
+#' @title reset.ufds
+#' @description Initialize UFDS
 #' @param m Number of elements.
 #' @return A data table containing a 'rank' column and a 'parent' column.
-#' @import data.table
+#' @importFrom data.table data.table
 #' @export
 reset.ufds <- function(m) {
   ufds <- data.table(rank=rep(0,m), p=as.integer(1:m))
   ufds
 }
 
-#' Find the set an elements belongs to.
+#' @title find.set
+#' @description Find the set an element belongs to.
 #' @param i The element to check.
 #' @param ufds A data.table representing a UFDS.
+#' @return An integer: the root node of the set the element belongs to.
+#' @importFrom data.table set
 #' @export
 find.set <- function (i, ufds) {
   if (ufds$p[i] == i) {
@@ -39,7 +44,8 @@ find.set <- function (i, ufds) {
   }
 }
 
-#' Check if two elements are in the same set
+#' @title is.same.set
+#' @description Check if two elements are in the same set
 #' @param i The first element in the tuple.
 #' @param j The second element in the tuple.
 #' @param ufds A data.table representing a UFDS.
@@ -52,10 +58,13 @@ is.same.set <- function(i, j, ufds) {
 }
 
 
-#' Join the sets the two elements passed as arguments belong to.
+#' @title union.set
+#' @description Join the sets the two elements passed as arguments belong to.
 #' @param i The first element in the tuple.
 #' @param j The second element in the tuple.
 #' @param ufds A data.table representing a UFDS.
+#' @return No return value, called for side effects on rank and p.
+#' @importFrom data.table set
 #' @export
 union.set <- function(i, j, ufds) {
   if (!is.same.set(i, j, ufds)) {
@@ -73,7 +82,8 @@ union.set <- function(i, j, ufds) {
   }
 }
 
-#' Kruskal's algorithm
+#' @title kruskal
+#' @description Kruskal's algorithm for MST computation.
 #' @param edge.list A data frame with columnns 'from', 'to', 'dist'.
 #' @param m Number of nodes.
 #' @return A list of edges in the MST, in the same format as the input argument edge.list.
@@ -95,7 +105,8 @@ kruskal <- function(edge.list, m) {
   mst.edge.list
 }
 
-#' Generate an adjacency list
+#' @title gen.child.list.mst
+#' @description Generate an adjacency list
 #' @param clust.edge.list The return value of the kruskal() function.
 #' @param m Number of nodes.
 #' @return An adjacency list in the form of a list of vectors.
@@ -113,19 +124,26 @@ gen.child.list.mst <- function(clust.edge.list, m) {
   child.list.mst
 }
 
-
-#' Run clustering using MST.
+#' @title mst.cluster
+#' @description Run clustering using MST.
 #' Before calling this function, remove some edges from the MST, for example the  k-1 heaviest.
-#' For example:
-#' ```
-#' k <- 3
-#' n.edges <- nrow(mst.edge.list)
-#' child.list.mst <- child.list.mst[1:(n.edges - (k - 1)),]
-#' ```
 #' @param child.list.mst The return value of the gen.child.list.mst() function with k-1 edges removed.
 #' @param m Number of nodes.
 #' @param k The number of clusters.
 #' @return A vector whose k-th element is the cluster the k-th point belongs to.
+#' @importFrom data.table set
+#' @importFrom data.table data.table
+#' @examples
+#' iris.clean <- iris[,-5]
+#' iris.dist <- as.matrix(dist(iris.clean))
+#' iris.edge.list <- gen.edge.list(iris.dist)
+#' m <- nrow(iris.dist)
+#' iris.mst.edge.list <- kruskal(iris.edge.list, m)
+#' k <- 3
+#' n.edges <- nrow(iris.mst.edge.list)
+#' iris.mst.edge.list <- iris.mst.edge.list[1:(n.edges - (k - 1)),]
+#' iris.child.list.mst <- gen.child.list.mst(iris.mst.edge.list, m)
+#' iris.clust.mst <- mst.cluster(iris.child.list.mst, m, k)
 #' @export
 mst.cluster <- function(child.list.mst, m, k) {
   cluster.list.top <- data.table(visited=rep(FALSE, m), clust.mst=rep(0, m))

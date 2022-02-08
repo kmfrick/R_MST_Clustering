@@ -2,10 +2,7 @@
 % Please edit documentation in R/mstclustering.R
 \name{gen.edge.list}
 \alias{gen.edge.list}
-\title{Generate edge list from a distance matrix
-Duplicates are not deleted, because they will not be counted
-by Kruskal's algorithm
-If a check is O(1), this only adds an O(E) overhead, which is negligible}
+\title{gen.edge.list}
 \usage{
 gen.edge.list(mat)
 }

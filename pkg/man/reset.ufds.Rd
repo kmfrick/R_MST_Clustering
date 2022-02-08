@@ -2,7 +2,7 @@
 % Please edit documentation in R/mstclustering.R
 \name{reset.ufds}
 \alias{reset.ufds}
-\title{Initialize UFDS}
+\title{reset.ufds}
 \usage{
 reset.ufds(m)
 }

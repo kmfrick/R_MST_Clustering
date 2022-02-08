@@ -2,7 +2,7 @@
 % Please edit documentation in R/mstclustering.R
 \name{kruskal}
 \alias{kruskal}
-\title{Kruskal's algorithm}
+\title{kruskal}
 \usage{
 kruskal(edge.list, m)
 }
@@ -15,5 +15,5 @@ kruskal(edge.list, m)
 A list of edges in the MST, in the same format as the input argument edge.list.
 }
 \description{
-Kruskal's algorithm
+Kruskal's algorithm for MST computation.
 }

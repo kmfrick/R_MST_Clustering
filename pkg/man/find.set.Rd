@@ -2,7 +2,7 @@
 % Please edit documentation in R/mstclustering.R
 \name{find.set}
 \alias{find.set}
-\title{Find the set an elements belongs to.}
+\title{find.set}
 \usage{
 find.set(i, ufds)
 }
@@ -11,6 +11,9 @@ find.set(i, ufds)
 
 \item{ufds}{A data.table representing a UFDS.}
 }
+\value{
+An integer: the root node of the set the element belongs to.
+}
 \description{
-Find the set an elements belongs to.
+Find the set an element belongs to.
 }

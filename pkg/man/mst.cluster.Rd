@@ -2,12 +2,7 @@
 % Please edit documentation in R/mstclustering.R
 \name{mst.cluster}
 \alias{mst.cluster}
-\title{Run clustering using MST.
-Before calling this function, remove some edges from the MST, for example the  k-1 heaviest.
-For example:\preformatted{k <- 3
-n.edges <- nrow(mst.edge.list)
-child.list.mst <- child.list.mst[1:(n.edges - (k - 1)),]
-}}
+\title{mst.cluster}
 \usage{
 mst.cluster(child.list.mst, m, k)
 }
@@ -24,8 +19,16 @@ A vector whose k-th element is the cluster the k-th point belongs to.
 \description{
 Run clustering using MST.
 Before calling this function, remove some edges from the MST, for example the  k-1 heaviest.
-For example:\preformatted{k <- 3
-n.edges <- nrow(mst.edge.list)
-child.list.mst <- child.list.mst[1:(n.edges - (k - 1)),]
 }
+\examples{
+iris.clean <- iris[,-5]
+iris.dist <- as.matrix(dist(iris.clean))
+iris.edge.list <- gen.edge.list(iris.dist)
+m <- nrow(iris.dist)
+iris.mst.edge.list <- kruskal(iris.edge.list, m)
+k <- 3
+n.edges <- nrow(iris.mst.edge.list)
+iris.mst.edge.list <- iris.mst.edge.list[1:(n.edges - (k - 1)),]
+iris.child.list.mst <- gen.child.list.mst(iris.mst.edge.list, m)
+iris.clust.mst <- mst.cluster(iris.child.list.mst, m, k)
 }
